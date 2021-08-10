@@ -139,24 +139,20 @@ namespace InputArgumentsParser
             }
         }
 
-        public object GetObject(object obj)
+        public object GetObject(Type type)
         {
             try
             {
-                Type type = obj.GetType();
+                object obj = Activator.CreateInstance(type);
                 foreach (var property in type.GetProperties())
                 {
                     try
                     {
                         string strValue = GetStringByArgumentName(property.Name);
-                        Console.WriteLine("xd: " + property.Name + " " + property.PropertyType+ " " + strValue);
+                        //Console.WriteLine("xd: " + property.Name + " " + property.PropertyType+ " " + strValue);
                         if (!(strValue is null))
                         {
                             property.SetValue(obj, Convert.ChangeType(strValue, property.PropertyType));
-                        }
-                        else
-                        {
-                            property.SetValue(obj, null);
                         }
                     }
                     catch
@@ -168,7 +164,7 @@ namespace InputArgumentsParser
             }
             catch
             {
-                Console.WriteLine("aaaa");
+                Console.WriteLine("Parsing object error.");
                 throw;
             }
         }
